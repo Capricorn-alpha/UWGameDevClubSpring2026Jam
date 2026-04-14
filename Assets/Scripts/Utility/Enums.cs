@@ -1,6 +1,6 @@
 public enum SoftwareType
 {
-    Youtuebe,
+    Steam,
     Reddit,
     Vscode
 }

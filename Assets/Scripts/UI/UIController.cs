@@ -11,7 +11,6 @@ public class UIController : MonoBehaviour
 
     private void Awake() => RebuildButtons();
 
-    /// <summary>清空 holder 下已有子物体，并按列表重新生成按钮。</summary>
     public void RebuildButtons()
     {
         if (buttonPrefab == null || buttonHolder == null || softwareDatas == null)
