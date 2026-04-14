@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Events;
 
 public class ButtonUI : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class ButtonUI : MonoBehaviour
     public void OnButtonClicked()
     {
         Debug.Log($"Button clicked - SoftwareType: {softwareType}");
+        EventBus.Publish(new SoftwareButtonClickedEvent(softwareType));
     }
 
     // Optional: public getter for other scripts

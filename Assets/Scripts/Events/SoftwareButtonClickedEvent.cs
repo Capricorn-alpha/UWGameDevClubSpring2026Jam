@@ -1,14 +1,15 @@
+using System.Drawing;
 using FrameWork.Event;
 
-namespace FrameWork.Event;
+namespace Events;
 
-public class SoftwareButtonClickedEvent : IEvent
+public readonly record struct SoftwareButtonClickedEvent : IEvent
 {
-    public SoftwareType SoftwareType { get; }
+    public readonly SoftwareType type;
 
-    public SoftwareButtonClickedEvent(SoftwareType softwareType)
+    public SoftwareButtonClickedEvent(SoftwareType type)
     {
-        SoftwareType = softwareType;
+        this.type = type;
     }
 }
 

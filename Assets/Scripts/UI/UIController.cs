@@ -5,7 +5,7 @@ public class UIController : MonoBehaviour
 {
     [SerializeField] private List<SoftwareData> softwareDatas;
     [SerializeField] private GameObject buttonPrefab;
-    [SerializeField] private Transform buttonHolder;
+    [SerializeField] private RectTransform buttonHolder;
 
     public IReadOnlyList<SoftwareData> SoftwareDatas => softwareDatas;
 
