@@ -273,8 +273,8 @@ MonoBehaviour:
     y: 0
     width: 383
     height: 480
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 226}
+  m_MaxSize: {x: 4002, y: 4026}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
@@ -1331,7 +1331,7 @@ MonoBehaviour:
   m_Position:
     m_Target: {x: 901.3678, y: 531.4134, z: 0}
     speed: 2
-    m_Value: {x: 792.7675, y: 547.7855, z: 3.0882769}
+    m_Value: {x: 901.3678, y: 531.4134, z: 0}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1383,7 +1383,7 @@ MonoBehaviour:
   m_Size:
     m_Target: 727.7122
     speed: 2
-    m_Value: 467.18762
+    m_Value: 727.7122
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1615,7 +1615,7 @@ MonoBehaviour:
     m_DynamicPanelBehavior: 0
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 83440
+  m_LastSelectedObjectID: -20026
 --- !u!114 &20
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1661,15 +1661,7 @@ MonoBehaviour:
       m_LastClickedID:
         m_Data: 0
       m_ExpandedIDs:
-      - m_Data: -51128
-      - m_Data: -51118
-      - m_Data: -51108
-      - m_Data: -51004
-      - m_Data: -1296
-      - m_Data: 45856
-      - m_Data: 45874
-      - m_Data: 45898
-      - m_Data: 45902
+      - m_Data: -1966
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1743,8 +1735,7 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SkipHidden: 0
     m_SearchArea: 1
-    m_Folders:
-    - Assets/Prefabs/Steam
+    m_Folders: []
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1767,17 +1758,13 @@ MonoBehaviour:
       m_Data: 49942
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 46598
-    - m_Data: 46600
-    - m_Data: 46602
-    - m_Data: 46604
-    - m_Data: 46606
-    - m_Data: 46608
-    - m_Data: 46610
-    - m_Data: 46612
-    - m_Data: 46614
-    - m_Data: 46616
-    - m_Data: 46618
+    - m_Data: 47938
+    - m_Data: 47940
+    - m_Data: 47942
+    - m_Data: 47944
+    - m_Data: 47946
+    - m_Data: 47948
+    - m_Data: 47950
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1810,23 +1797,23 @@ MonoBehaviour:
       m_Data: 0
     m_ExpandedIDs:
     - m_Data: 0
-    - m_Data: 46598
-    - m_Data: 46600
-    - m_Data: 46602
-    - m_Data: 46604
-    - m_Data: 46606
-    - m_Data: 46608
-    - m_Data: 46610
-    - m_Data: 46612
-    - m_Data: 46618
-    - m_Data: 46968
-    - m_Data: 46986
-    - m_Data: 76562
-    - m_Data: 80316
+    - m_Data: 47938
+    - m_Data: 47940
+    - m_Data: 47942
+    - m_Data: 47944
+    - m_Data: 47946
+    - m_Data: 47948
+    - m_Data: 47950
+    - m_Data: 48292
+    - m_Data: 48296
+    - m_Data: 48304
+    - m_Data: 48310
+    - m_Data: 48516
+    - m_Data: 49334
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: AfterReplyEvent
-      m_OriginalName: AfterReplyEvent
+      m_Name: ScoreChangedEvent
+      m_OriginalName: ScoreChangedEvent
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
@@ -1834,7 +1821,7 @@ MonoBehaviour:
         width: 0
         height: 0
       m_UserData:
-        m_Data: 102552
+        m_Data: 49366
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
       m_OriginalEventType: 0
