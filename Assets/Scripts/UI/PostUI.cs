@@ -17,8 +17,8 @@ public class PostUI : Singleton<PostUI>
 
     private void Start()
     {
-        if(hidePopupMenu && popupMenuPrefab != null
-        ){
+        if(hidePopupMenu && popupMenuPrefab != null)
+        {
             popupMenuPrefab.SetActive(false);
         }
     }
