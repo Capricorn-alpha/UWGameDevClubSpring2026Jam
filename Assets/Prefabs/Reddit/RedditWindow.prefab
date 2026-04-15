@@ -732,7 +732,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -241.49997, y: 338.64972}
+  m_AnchoredPosition: {x: -241.501, y: 338.65}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1206474226304054204
@@ -753,7 +753,7 @@ MonoBehaviour:
     m_Top: 10
     m_Bottom: 0
   m_ChildAlignment: 3
-  m_Spacing: 40
+  m_Spacing: 85
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -786,7 +786,7 @@ GameObject:
   - component: {fileID: 5923231824921554331}
   - component: {fileID: 2792524125975162431}
   - component: {fileID: 7001208595657253210}
-  - component: {fileID: 2433546523675655097}
+  - component: {fileID: 8891756115322227360}
   m_Layer: 0
   m_Name: RedditWindow
   m_TagString: Untagged
@@ -858,7 +858,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &2433546523675655097
+--- !u!114 &8891756115322227360
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -867,11 +867,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4312343316696221451}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80c9062d1bcf77e4a93cdeda7f912a62, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d4a9cc2acdc7344face7ac047b1b3d9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WindowBase
+  m_EditorClassIdentifier: Assembly-CSharp::RedditWindow
   closeButton: {fileID: 1467375707273539264}
   dragHandle: {fileID: 956194374367114081}
+  content: {fileID: 8737384133333226950}
+  postPrefab: {fileID: 8990128236684968404, guid: 48891c27399778a45acd622d44d98bc4, type: 3}
+  postCount: 3
 --- !u!1 &4608666809821156717
 GameObject:
   m_ObjectHideFlags: 0
@@ -1799,7 +1802,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8884388402622086842}
   m_HandleRect: {fileID: 3197759180463204975}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1903,6 +1906,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8737384133333226950}
     m_Modifications:
+    - target: {fileID: 5124181064964623764, guid: 48891c27399778a45acd622d44d98bc4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7301411684015100274, guid: 48891c27399778a45acd622d44d98bc4, type: 3}
+      propertyPath: m_margin.z
+      value: -181.71368
+      objectReference: {fileID: 0}
+    - target: {fileID: 7301411684015100274, guid: 48891c27399778a45acd622d44d98bc4, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
     - target: {fileID: 8658385653596341927, guid: 48891c27399778a45acd622d44d98bc4, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

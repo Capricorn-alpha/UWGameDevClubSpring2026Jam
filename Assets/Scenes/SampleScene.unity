@@ -646,6 +646,9 @@ MonoBehaviour:
   - type: 1
     prefab: {fileID: 4312343316696221451, guid: 35d0f43e984d45643ace53eb82bfb914, type: 3}
     name: Reddit
+  - type: 0
+    prefab: {fileID: 4312343316696221451, guid: 2263639fbe5cf9d4f8acf7abb722ac38, type: 3}
+    name: Steam
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

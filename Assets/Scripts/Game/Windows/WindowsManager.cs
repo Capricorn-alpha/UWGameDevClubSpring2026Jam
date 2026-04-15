@@ -20,7 +20,7 @@ public class WindowsManager : Singleton<WindowsManager>, IEventReceiver<Software
     protected override void Awake()
     {
         base.Awake();
-        foreach(var window in windows){
+        foreach (var window in windows){
             _prefabByType[window.type] = window.prefab;
         }
     }
@@ -42,13 +42,13 @@ public class WindowsManager : Singleton<WindowsManager>, IEventReceiver<Software
 
     public void OpenWindow(SoftwareType type)
     {
-        if(!_prefabByType.TryGetValue(type, out GameObject prefab))
+        if (!_prefabByType.TryGetValue(type, out GameObject prefab))
         {
             Debug.LogError($"Window prefab not found for type: {type}");
             return;
         }
 
-        if(_openByType.TryGetValue(type, out GameObject existingWindow) && existingWindow != null)
+        if (_openByType.TryGetValue(type, out GameObject existingWindow) && existingWindow != null)
         {
             existingWindow.SetActive(true);
             return;

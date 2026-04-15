@@ -1,9 +1,8 @@
-using System.Drawing;
 using FrameWork.Event;
 
 namespace Events;
 
-public readonly record struct SoftwareButtonClickedEvent : IEvent
+public readonly struct SoftwareButtonClickedEvent : IEvent
 {
     public readonly SoftwareType type;
 

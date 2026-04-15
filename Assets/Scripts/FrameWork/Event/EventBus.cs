@@ -41,12 +41,12 @@ public static class EventBus
     {
         Type eventType = typeof(TEvent);
 
-        if(EventDict.TryGetValue(eventType, out var receivers))
+        if (EventDict.TryGetValue(eventType, out var receivers))
         {
-            for(int i = 0; i < receivers.Count; i++)
+            for (int i = 0; i < receivers.Count; i++)
             {
                 var obj = receivers[i];
-                if(obj is UnityEngine.Object unityObj && unityObj == null)
+                if (obj is UnityEngine.Object unityObj && unityObj == null)
                 {
                     receivers.RemoveAt(i);
                     continue;    
@@ -55,7 +55,7 @@ public static class EventBus
             }
         }
 
-        if(receivers.Count == 0)
+        if (receivers.Count == 0)
         {
             EventDict.Remove(eventType);
         }
