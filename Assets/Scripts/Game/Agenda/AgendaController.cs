@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class AgendaController : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class AgendaController : MonoBehaviour
     private int day;
     private int bugs = 5;
     private bool dayStarted;
-    private bool agendaCompleted;
+    private HoldButton powerButton;
+    [SerializeField] private GameObject LogIn;
 
     public void Start()
     {
@@ -18,9 +20,9 @@ public class AgendaController : MonoBehaviour
 
         postPrefabQueue = new Queue<GameObject>();
         Instantiate(postPrefab);
+        LogIn.SetActive(true);
 
         dayStarted = false;
-        agendaCompleted = false;
 
         dayCounter.text = "Day " + day.ToString();
     }
@@ -29,7 +31,7 @@ public class AgendaController : MonoBehaviour
     {
         ShowAgenda();
 
-        if (dayStarted && agendaCompleted)
+        if (dayStarted && powerButton.isPressed)
         {
             ResetAgenda();
         }
@@ -61,16 +63,13 @@ public class AgendaController : MonoBehaviour
     // Reset the agenda for the next day
     public void ResetAgenda()
     {
-        if (dayStarted && agendaCompleted)
-        {
-            dayStarted = false;
-            agendaCompleted = false;
+        dayStarted = false;
+        LogIn.SetActive(true);
 
-            day++;
-            dayCounter.text = "Day " + day.ToString();
-            agendaText.text = "Agenda for Day " + day.ToString() + ":\n";
-            postPrefabQueue.Clear();
-        }
+        day++;
+        dayCounter.text = "Day " + day.ToString();
+        agendaText.text = "Agenda for Day " + day.ToString() + ":\n";
+        postPrefabQueue.Clear();
     }
 
     // Mark the task as completed
@@ -79,12 +78,12 @@ public class AgendaController : MonoBehaviour
         agendaText.text = agendaText.text.Replace("- " + postPrefabQueue.Dequeue().name + "\n", "");
     }
 
+    // Mark all agenda as completed
     public void CompleteAgenda()
     {
         if (bugs == 0)
         {
             agendaText.text = "Agenda for Day " + day.ToString() + ":\n- All tasks completed!";
-            agendaCompleted = true;
         }
     }
 }
