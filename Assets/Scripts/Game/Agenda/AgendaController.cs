@@ -6,8 +6,8 @@ public class AgendaController : MonoBehaviour
 {
     public GameObject postPrefab;
     private Queue<GameObject> postPrefabQueue;
-    public TextMeshProUGUI dayCounter;
-    public TextMeshProUGUI agendaText;
+    public TMP_Text dayCounter;
+    public TMP_Text agendaText;
     private int day;
     private int bugs = 5;
     private bool dayStarted;
