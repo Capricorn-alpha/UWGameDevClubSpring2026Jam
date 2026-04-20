@@ -11,19 +11,14 @@ public class AgendaController : MonoBehaviour
     private int day;
     private int bugs = 5;
     private bool dayStarted;
-    private HoldButton powerButton;
-    [SerializeField] private GameObject LogIn;
+    private LogIn logInController;
 
     public void Start()
     {
         day = 1;
-
         postPrefabQueue = new Queue<GameObject>();
         Instantiate(postPrefab);
-        LogIn.SetActive(true);
-
         dayStarted = false;
-
         dayCounter.text = "Day " + day.ToString();
     }
 
@@ -31,7 +26,7 @@ public class AgendaController : MonoBehaviour
     {
         ShowAgenda();
 
-        if (dayStarted && powerButton.isPressed)
+        if (dayStarted && logInController.LoggedIn())
         {
             ResetAgenda();
         }
@@ -64,7 +59,6 @@ public class AgendaController : MonoBehaviour
     public void ResetAgenda()
     {
         dayStarted = false;
-        LogIn.SetActive(true);
 
         day++;
         dayCounter.text = "Day " + day.ToString();
