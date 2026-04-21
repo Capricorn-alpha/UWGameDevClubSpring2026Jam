@@ -26,7 +26,7 @@ public class AgendaController : MonoBehaviour
     {
         ShowAgenda();
 
-        if (dayStarted && logInController.LoggedIn())
+        if (dayStarted && logInController.LogInIsClicked())
         {
             ResetAgenda();
         }

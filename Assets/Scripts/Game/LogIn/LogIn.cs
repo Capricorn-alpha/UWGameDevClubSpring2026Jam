@@ -1,39 +1,43 @@
-using System.Diagnostics.Contracts;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class LogIn : MonoBehaviour
 {
-    [SerializeField] private HoldButton LogInButton;
-    [SerializeField] private HoldButton powerButton;
+    [SerializeField] private Button logInButton;
+    [SerializeField] private Button powerButton;
 
     [SerializeField] private GameObject LogInScreen;
+    private bool logInIsClicked;
+    private bool powerIsClicked;
 
     public void Start()
     {
         LogInScreen.SetActive(true);
+
+        logInButton.onClick.AddListener(() => logInIsClicked = true);
+        powerButton.onClick.AddListener(() => powerIsClicked = true);
     }
 
     public void Update()
     {
-        if (LoggedIn())
+        if (logInIsClicked)
         {
             LogInScreen.SetActive(false);
+
+            logInIsClicked = false;
         }
 
-        LogOut();
-    }
-
-
-    public bool LoggedIn()
-    {
-        return LogInButton.isPressed;
-    }
-
-    public void LogOut()
-    {
-        if (powerButton.isPressed)
+        if (powerIsClicked)
         {
             LogInScreen.SetActive(true);
+
+            powerIsClicked = false;
         }
+    }
+
+    public bool LogInIsClicked()
+    {
+        return logInIsClicked;
     }
 }
