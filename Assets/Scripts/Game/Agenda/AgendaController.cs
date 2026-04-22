@@ -1,6 +1,9 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using FrameWork.Event;
+using Events;
 
 public class AgendaController : MonoBehaviour
 {
@@ -11,7 +14,6 @@ public class AgendaController : MonoBehaviour
     private int day;
     private int bugs = 5;
     private bool dayStarted;
-    private LogIn logInController;
 
     public void Start()
     {
@@ -25,11 +27,6 @@ public class AgendaController : MonoBehaviour
     public void Update()
     {
         ShowAgenda();
-
-        if (dayStarted && logInController.LogInIsClicked())
-        {
-            ResetAgenda();
-        }
     }
 
     // Add a new post prefab to the queue
@@ -64,6 +61,8 @@ public class AgendaController : MonoBehaviour
         dayCounter.text = "Day " + day.ToString();
         agendaText.text = "Agenda for Day " + day.ToString() + ":\n";
         postPrefabQueue.Clear();
+
+        EventBus.Publish(new DayChangedEvent(day));
     }
 
     // Mark the task as completed

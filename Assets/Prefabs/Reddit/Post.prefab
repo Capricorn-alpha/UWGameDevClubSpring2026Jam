@@ -1609,6 +1609,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8658385653596341927}
   - component: {fileID: 5902931736204016736}
+  - component: {fileID: 4028651974547825075}
   m_Layer: 0
   m_Name: Post
   m_TagString: Untagged
@@ -1664,6 +1665,22 @@ MonoBehaviour:
   replyPrefab: {fileID: 5124181064964623764}
   hideReplyPrefab: 1
   replyContentText: {fileID: 7301411684015100274}
+--- !u!114 &4028651974547825075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8990128236684968404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acfef18eabfed364e97624ade7b8f9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PostUIController
+  userProfileImage: {fileID: 5971383061303196412}
+  userNameText: {fileID: 4434160820678427344}
+  postBodyText: {fileID: 1148534012526702189}
+  postScoreText: {fileID: 303028368123706724}
 --- !u!1001 &4518334520367600470
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1867,6 +1884,10 @@ PrefabInstance:
     - target: {fileID: 1946734941413192388, guid: 2492825e957b98f49a98778765e542a8, type: 3}
       propertyPath: m_Name
       value: Reply
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946734941413192388, guid: 2492825e957b98f49a98778765e542a8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2191990173889154791, guid: 2492825e957b98f49a98778765e542a8, type: 3}
       propertyPath: m_Pivot.x
