@@ -1,47 +1,32 @@
 using UnityEngine;
+using FrameWork.Event;
+using Events;
 
 public class RedditWindow : WindowBase
 {
     [SerializeField] private RectTransform content;
     [SerializeField] private GameObject postPrefab;
 
-    [SerializeField] private int postCount = 3;
-
-    private void Start()
+    private void OnEnable()
     {
-        if (postCount > 0)
+        // 只需要向外广播自己的 content 即可
+        if(content != null)
         {
-            SpawnPosts(postCount);
+            EventBus.Publish(new PostContainerReadyEvent(content));
         }
     }
 
-    private void ClearPosts()
-    {
-        if (content == null) return;
+    // private void SpawnPosts(int postCount){
+    //     if (postPrefab == null || content == null)
+    //     {
+    //         Debug.Log("Post prefab or content is not assigned");
+    //         return;
+    //     }
 
-        for (int i = content.childCount - 1; i >= 0; i--)
-        {
-            Destroy(content.GetChild(i).gameObject);
-        }
-    }
-
-    private void SpawnPosts(int postCount){
-        if (postPrefab == null || content == null)
-        {
-            Debug.Log("Post prefab or content is not assigned");
-            return;
-        }
-
-        for (int i = 0; i < postCount; i++)
-        {
-            var post = Instantiate(postPrefab, content);
-            post.name = $"Post_{i+1}";
-        }
-    }
-
-    public void ClearAndSpawnPosts()
-    {
-        ClearPosts();
-        SpawnPosts(postCount);
-    }
+    //     for (int i = 0; i < postCount; i++)
+    //     {
+    //         var post = Instantiate(postPrefab, content);
+    //         post.name = $"Post_{i+1}";
+    //     }
+    // }
 }

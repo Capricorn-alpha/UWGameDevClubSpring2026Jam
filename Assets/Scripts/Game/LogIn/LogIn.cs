@@ -10,6 +10,7 @@ public class LogIn : MonoBehaviour
 
     [SerializeField] private GameObject LogInScreen;
     [SerializeField] private GameObject LogOutScreen;
+    [SerializeField] private AgendaController agendaController;
     private bool logInIsClicked;
     private bool logOutIsClicked;
     private bool powerIsClicked;
@@ -21,7 +22,7 @@ public class LogIn : MonoBehaviour
 
         logInButton.onClick.AddListener(() => logInIsClicked = true);
         powerButton.onClick.AddListener(() => powerIsClicked = true);
-        logOutButton.onClick.AddListener(() => logOutIsClicked = true);
+        logOutButton.onClick.AddListener(() => {logOutIsClicked = true; agendaController.ResetAgenda();});
     }
 
     public void Update()
