@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a04de389c40b3e4b82135e6326ad6e5, type: 3}
+  m_Name: Grass
+  m_EditorClassIdentifier: Assembly-CSharp::Environment
+  name: Grass
+  map: {fileID: 21300000, guid: a9f739061aa1b3546b72e04becc3a6be, type: 3}
