@@ -749,7 +749,10 @@ MonoBehaviour:
   logOutButton: {fileID: 1752927475}
   LogInScreen: {fileID: 1948137691}
   LogOutScreen: {fileID: 714015942}
+<<<<<<< Updated upstream
   agendaController: {fileID: 1948699802}
+=======
+>>>>>>> Stashed changes
 --- !u!1 &481013162
 GameObject:
   m_ObjectHideFlags: 0
@@ -1522,7 +1525,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &714015943
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1648,7 +1651,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 8, y: 25}
-  m_SizeDelta: {x: 980, y: 548}
+  m_SizeDelta: {x: 980, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &745226474
 MonoBehaviour:
@@ -1959,8 +1962,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 201.5, y: -177.8}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchoredPosition: {x: -365.4, y: -195.1}
+  m_SizeDelta: {x: 70, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &995825725
 MonoBehaviour:
@@ -2905,7 +2908,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -65.8, y: -179.7}
+  m_AnchoredPosition: {x: -68, y: -180}
   m_SizeDelta: {x: 85, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1572719896
@@ -3023,8 +3026,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 7.8981323, y: 23.081268}
-  m_SizeDelta: {x: 800, y: 450}
+  m_AnchoredPosition: {x: 7.8981323, y: 24}
+  m_SizeDelta: {x: 800, y: 410}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1728996548
 MonoBehaviour:
@@ -3064,7 +3067,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9e1a32ea2bbde324cb898f1afb182511, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ed6cfebe218a5a4dae7ae9eba52214c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
