@@ -947,6 +947,8 @@ MonoBehaviour:
   canvas: {fileID: 0}
   highlightColor: {r: 1, g: 0, b: 0, a: 1}
   borderSize: {x: 6, y: 6}
+  cellSize: 150
+  mapSize: 5
 --- !u!1 &4049564369392541667
 GameObject:
   m_ObjectHideFlags: 0

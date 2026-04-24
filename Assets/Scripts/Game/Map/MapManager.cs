@@ -5,16 +5,19 @@ using System.Collections.Generic;
 
 public class MapManager : MonoBehaviour
 {
+    [Header("Grid Selection")]
     public RectTransform map;
     public Canvas canvas;
 
     public Color highlightColor = Color.green;
     public Vector2 borderSize = new Vector2(10, 10);
+    private List<GameObject> selectedGroup = null;
 
+    [Header("Grid Movement")]
+    public float cellSize = 150f;
+    public int mapSize = 5;
     private EnvironmentGroup group;
     private Dictionary<Sprite, List<GameObject>> environmentDictionary;
-
-    private List<GameObject> selectedGroup = null;
 
     void Start()
     {
@@ -28,6 +31,64 @@ public class MapManager : MonoBehaviour
         {
             DetectClick();
         }
+
+        HandleMovement();
+    }
+
+    void HandleMovement()
+    {
+        if (selectedGroup == null)
+            return;
+
+        Vector2 move = Vector2.zero;
+
+        if (Keyboard.current.wKey.wasPressedThisFrame)
+            move = Vector2.up;
+        else if (Keyboard.current.sKey.wasPressedThisFrame)
+            move = Vector2.down;
+        else if (Keyboard.current.aKey.wasPressedThisFrame)
+            move = Vector2.left;
+        else if (Keyboard.current.dKey.wasPressedThisFrame)
+            move = Vector2.right;
+
+        if (move == Vector2.zero)
+            return;
+
+        Vector2 offset = move * cellSize;
+
+        if (CanMoveGroup(offset))
+        {
+            foreach (GameObject obj in selectedGroup)
+            {
+                RectTransform rect = obj.GetComponent<RectTransform>();
+                rect.anchoredPosition += offset;
+            }
+        }
+    }
+
+    bool CanMoveGroup(Vector2 direction)
+    {
+        float halfMap = (mapSize - 1) * cellSize / 2f;
+
+        foreach (GameObject obj in selectedGroup)
+        {
+            RectTransform rect = obj.GetComponent<RectTransform>();
+            Vector2 currentPos = rect.anchoredPosition;
+
+            if (direction == Vector2.right && currentPos.x >= halfMap)
+                return false;
+
+            if (direction == Vector2.left && currentPos.x <= -halfMap)
+                return false;
+
+            if (direction == Vector2.up && currentPos.y >= halfMap)
+                return false;
+
+            if (direction == Vector2.down && currentPos.y <= -halfMap)
+                return false;
+        }
+
+        return true;
     }
 
     void DetectClick()
