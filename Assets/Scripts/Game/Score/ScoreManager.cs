@@ -15,13 +15,7 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
     [SerializeField] private int reviewCountDeltaPerAction = 8;
 
     [Header("Environment Amount")]
-    [SerializeField] private int water;
-    [SerializeField] private int grass;
-    [SerializeField] private int rock;
-    [SerializeField] private int waterGrass;
-    [SerializeField] private int waterRock; 
-    [SerializeField] private int grassRock;
-    [SerializeField] private int waterGrassRock;
+    [SerializeField] private int[] scores;
 
     private int _steamWindowRefCount;
     private bool _pendingUiSync;
@@ -74,6 +68,16 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
             ApplyReviewChange(rudeReplyDelta, reviewCountDeltaPerAction);   
     }
 
+    public void OnEvent(VscodeScoreEvent e)
+    {
+        ApplyVscodeScore(e.scores);
+    }
+
+    private void ApplyVscodeScore(int[] scores)
+    {
+        
+    }
+
     private void ApplyReviewChange(float scoreDelta, int countDelta)
     {
         ratingNormalized = Mathf.Clamp01(ratingNormalized + scoreDelta);
@@ -91,10 +95,5 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
     private void PublishScoreChanged()
     {
         EventBus.Publish(new ScoreChangedEvent(ratingNormalized, reviewsCount));
-    }
-
-    private void PublishVscodeScore()
-    {
-        EventBus.Publish(new Vscode(water, grass, rock, waterGrass, waterRock, grassRock, waterGrassRock));
     }
 }
