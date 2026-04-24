@@ -17,26 +17,20 @@ public class EnvironmentGroup : MonoBehaviour
             if (images == null || images.Length == 0)
                 continue;
 
-            if (images.Length == 2)
+            foreach (Image image in images)
             {
-                Sprite arrow = images[1].sprite;
+                if (image.sprite == null)
+                    continue;
 
-                if (!environmentGroup.ContainsKey(arrow))
+                Sprite sprite = image.sprite;
+
+                if (!environmentGroup.ContainsKey(sprite))
                 {
-                    environmentGroup[arrow] = new List<GameObject>();
+                    environmentGroup[sprite] = new List<GameObject>();
                 }
 
-                environmentGroup[arrow].Add(environment.gameObject);
+                environmentGroup[sprite].Add(environment.gameObject);
             }
-
-            Sprite environmentSprite = images[0].sprite;
-
-            if (!environmentGroup.ContainsKey(environmentSprite))
-            {
-                environmentGroup[environmentSprite] = new List<GameObject>();
-            }
-
-            environmentGroup[environmentSprite].Add(environment.gameObject);
         }
 
         return environmentGroup;
