@@ -10,11 +10,11 @@ public class Environment : ScriptableObject
 
 public enum EnvironmentType
 {
-    rock,
-    grass,
-    water,
-    waterGrass,
-    rockWater,
-    rockGrass,
-    waterRockGrass
+    water = 0,
+    grass = 1,
+    rock = 2,
+    waterGrass = 3,
+    waterRock = 4,
+    grassRock = 5,
+    waterGrassRock = 6
 }

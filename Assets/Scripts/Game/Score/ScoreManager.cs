@@ -14,8 +14,10 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
     [SerializeField] private float rudeReplyDelta = -0.05f;
     [SerializeField] private int reviewCountDeltaPerAction = 8;
 
-    [Header("Environment Amount")]
-    [SerializeField] private int[] scores;
+    [Header("Environment")]
+    [SerializeField] private int[] gridCount = new int[7];
+    [SerializeField] private int[] gridScore = new int[7];
+
 
     private int _steamWindowRefCount;
     private bool _pendingUiSync;
@@ -43,7 +45,6 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
         EventBus.Unsubscribe<VscodeScoreEvent>(this);
     }
 
-    /// <summary>由 SteamWindow.OnEnable 调用（须已订阅 ScoreChangedEvent）。首次从 0→1 且有待同步分数时会补发一次事件。</summary>
     public void RegisterSteamWindow()
     {
         _steamWindowRefCount++;
@@ -54,7 +55,6 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
         }
     }
 
-    /// <summary>由 SteamWindow.OnDisable 调用。</summary>
     public void UnregisterSteamWindow()
     {
         _steamWindowRefCount = Mathf.Max(0, _steamWindowRefCount - 1);
@@ -70,10 +70,10 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
 
     public void OnEvent(VscodeScoreEvent e)
     {
-        ApplyVscodeScore(e.scores);
+        ApplyVscodeScore(e.counts);
     }
 
-    private void ApplyVscodeScore(int[] scores)
+    private void ApplyVscodeScore(int[] counts)
     {
         
     }

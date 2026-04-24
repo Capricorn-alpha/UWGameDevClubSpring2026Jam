@@ -4,10 +4,10 @@ namespace Events;
 
 public readonly struct VscodeScoreEvent : IEvent
 {
-    public readonly int[] scores;
+    public readonly int[] counts;
 
-    public VscodeScoreEvent(int[] scores)
+    public VscodeScoreEvent(int[] counts)
     {
-        this.scores = scores;
+        this.counts = counts;
     }
 }

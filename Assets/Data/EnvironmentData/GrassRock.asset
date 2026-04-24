@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: GrassRock
   m_EditorClassIdentifier: Assembly-CSharp::Environment
   name: 
-  map: {fileID: 0}
+  map: {fileID: 21300000, guid: b91ceeb51cff8004191c669b0e014c83, type: 3}
   score: 0

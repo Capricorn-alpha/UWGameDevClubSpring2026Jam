@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1df9c58bd0ec74e4bbada123964802a8, type: 3}
-  m_Name: Youtube
+  m_Name: Steam
   m_EditorClassIdentifier: Assembly-CSharp::SoftwareData
   softwareType: 0
-  icon: {fileID: 21300000, guid: 708bbd53b6b78ac4fb8f3e8139db88a8, type: 3}
+  icon: {fileID: 21300000, guid: d08a11582e357b44b8ffee55b2e9e1c7, type: 3}
   displayName: 

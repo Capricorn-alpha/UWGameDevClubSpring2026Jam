@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Vscode
   m_EditorClassIdentifier: Assembly-CSharp::SoftwareData
   softwareType: 2
-  icon: {fileID: 21300000, guid: f7b8a493e7283054687a7a49fea6e131, type: 3}
+  icon: {fileID: 21300000, guid: d1836e310518baf45bd6c84f4cfe22fd, type: 3}
   displayName: 

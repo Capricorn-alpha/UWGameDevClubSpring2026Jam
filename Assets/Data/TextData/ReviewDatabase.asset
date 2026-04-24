@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 542df95b019bf6d4a9501253c15880b4, type: 3}
+  m_Name: ReviewDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::ReviewDatabase
+  reviewDetails:
+  - condition:
+      minDays: 1
+      maxDays: 3
+      minScore: 0
+      maxScore: 1
+      isPositive: 1
+    UserName: ILoveCUteCats
+    ReviewContent: I loved how much freedom I had in building various tunnels and
+      mines. It really does feel like you get to build your own little underground
+      world.

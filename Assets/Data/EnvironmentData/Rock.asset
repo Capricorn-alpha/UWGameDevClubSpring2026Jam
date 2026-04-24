@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Rock
   m_EditorClassIdentifier: Assembly-CSharp::Environment
   name: 
-  map: {fileID: 0}
+  map: {fileID: 21300000, guid: cb645338792db4742b807617dcdea712, type: 3}
   score: 0

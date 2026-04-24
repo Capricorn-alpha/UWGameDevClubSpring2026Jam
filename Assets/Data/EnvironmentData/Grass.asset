@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Grass
   m_EditorClassIdentifier: Assembly-CSharp::Environment
   name: 
-  map: {fileID: 0}
+  map: {fileID: 21300000, guid: a9f739061aa1b3546b72e04becc3a6be, type: 3}
+  score: 0

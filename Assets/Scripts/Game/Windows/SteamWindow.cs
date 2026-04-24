@@ -11,9 +11,13 @@ public class SteamWindow : WindowBase, IEventReceiver<ScoreChangedEvent>
     [SerializeField] private TMP_Text reviewsStatusInENG;
     [SerializeField] private TMP_Text reviewsCountInENG;
 
+    [SerializeField] private RectTransform content;
+
     private void OnEnable()
     {
         EventBus.Subscribe<ScoreChangedEvent>(this);
+        
+        EventBus.Publish(new ReviewContainerReadyEvent(content));
 
         if (ScoreManager.Instance != null)
         {
@@ -47,11 +51,11 @@ public class SteamWindow : WindowBase, IEventReceiver<ScoreChangedEvent>
 
     private static string GetReviewStatus(float score)
     {
-        if (score >= 0.85f) return "Overwhelmingly Positive";
-        if (score >= 0.70f) return "Very Positive";
+        if (score >= 0.85f) return "Masterpiece";
+        if (score >= 0.70f) return "Actually fun";
         if (score >= 0.55f) return "Mostly Positive";
-        if (score >= 0.40f) return "Mixed";
-        if (score >= 0.25f) return "Mostly Negative";
-        return "Overwhelmingly Negative";
+        if (score >= 0.40f) return "This is okay";
+        if (score >= 0.25f) return "Touch grass";
+        return "Please go and get a job";
     }
 }
