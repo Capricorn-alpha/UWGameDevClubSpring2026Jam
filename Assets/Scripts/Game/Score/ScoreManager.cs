@@ -2,7 +2,7 @@ using UnityEngine;
 using FrameWork.Event;
 using Events;
 
-public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCommentEvent>
+public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCommentEvent>, IEventReceiver<VscodeScoreEvent>
 {
     [Header("Score Model")]
     [Range(0f, 1f)]
@@ -13,6 +13,15 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
     [SerializeField] private float politeReplyDelta = 0.03f;
     [SerializeField] private float rudeReplyDelta = -0.05f;
     [SerializeField] private int reviewCountDeltaPerAction = 8;
+
+    [Header("Environment Amount")]
+    [SerializeField] private int water;
+    [SerializeField] private int grass;
+    [SerializeField] private int rock;
+    [SerializeField] private int waterGrass;
+    [SerializeField] private int waterRock; 
+    [SerializeField] private int grassRock;
+    [SerializeField] private int waterGrassRock;
 
     private int _steamWindowRefCount;
     private bool _pendingUiSync;
@@ -31,11 +40,13 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
     private void OnEnable()
     {
         EventBus.Subscribe<AfterReplyCommentEvent>(this);
+        EventBus.Subscribe<VscodeScoreEvent>(this);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<AfterReplyCommentEvent>(this);
+        EventBus.Unsubscribe<VscodeScoreEvent>(this);
     }
 
     /// <summary>由 SteamWindow.OnEnable 调用（须已订阅 ScoreChangedEvent）。首次从 0→1 且有待同步分数时会补发一次事件。</summary>
@@ -60,7 +71,7 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
         if (e.optionIndex == 0)
             ApplyReviewChange(politeReplyDelta, reviewCountDeltaPerAction);
         else if (e.optionIndex == 2)
-            ApplyReviewChange(rudeReplyDelta, reviewCountDeltaPerAction);
+            ApplyReviewChange(rudeReplyDelta, reviewCountDeltaPerAction);   
     }
 
     private void ApplyReviewChange(float scoreDelta, int countDelta)
@@ -80,5 +91,10 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
     private void PublishScoreChanged()
     {
         EventBus.Publish(new ScoreChangedEvent(ratingNormalized, reviewsCount));
+    }
+
+    private void PublishVscodeScore()
+    {
+        EventBus.Publish(new Vscode(water, grass, rock, waterGrass, waterRock, grassRock, waterGrassRock));
     }
 }

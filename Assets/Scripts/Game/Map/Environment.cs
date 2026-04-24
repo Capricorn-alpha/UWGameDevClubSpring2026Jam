@@ -5,6 +5,7 @@ public class Environment : ScriptableObject
 {
     public string name;
     public Sprite map;
+    public int score;
 }
 
 public enum EnvironmentType
