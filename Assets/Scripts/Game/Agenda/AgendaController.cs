@@ -48,6 +48,7 @@ public class AgendaController : MonoBehaviour
 
         foreach (GameObject prefab in postPrefabQueue)
         {
+            if (prefab == null) return;
             agendaText.text += "- " + prefab.name + "\n";
         }
     }
