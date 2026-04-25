@@ -1,5 +1,4 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 
 public class Tab : MonoBehaviour
@@ -7,10 +6,20 @@ public class Tab : MonoBehaviour
     [SerializeField] private Button button;
     [SerializeField] private Image tabImage;
     private TabManager manager;
+    private int levelIndex;
 
-    public void Initialize(TabManager tabManager)
+    private void Awake()
+    {
+        if (button == null)
+            button = GetComponent<Button>();
+        if (tabImage == null)
+            tabImage = GetComponent<Image>();
+    }
+
+    public void Initialize(TabManager tabManager, int index)
     {
         manager = tabManager;
+        levelIndex = index;
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(OnClicked);
     }
@@ -22,6 +31,12 @@ public class Tab : MonoBehaviour
 
     public void SetSprite(Sprite sprite)
     {
-        tabImage.sprite = sprite;
+        if (tabImage != null)
+            tabImage.sprite = sprite;
+    }
+
+    public int GetLevelIndex()
+    {
+        return levelIndex;
     }
 }

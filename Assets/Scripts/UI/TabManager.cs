@@ -4,10 +4,13 @@ public class TabManager : MonoBehaviour
 {
     private Sprite selectedSprite;
     private Sprite unselectedSprite;
-    private int index = 0;
 
     private Tab[] tabs;
     private Tab currentSelectedTab;
+
+    [Header("Levels")]
+    public LevelData[] levels; // Assign your 5 LevelData ScriptableObjects here
+    public MapManager mapManager; // Drag the VsCodeWindow (root) GameObject here
 
     private void Awake()
     {
@@ -19,15 +22,15 @@ public class TabManager : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < tabs.Length; i++)
+        for (int i = 0; i < tabs.Length && i < levels.Length; i++)
         {
-            tabs[i].Initialize(this);
+            tabs[i].Initialize(this, i);
             tabs[i].SetSprite(unselectedSprite);
         }
 
-        if (tabs.Length > 0 && index >= 0 && index < tabs.Length)
+        if (tabs.Length > 0)
         {
-            SelectTab(tabs[index]);
+            SelectTab(tabs[0]);
         }
     }
 
@@ -43,5 +46,11 @@ public class TabManager : MonoBehaviour
 
         clickedTab.SetSprite(selectedSprite);
         currentSelectedTab = clickedTab;
+
+        int levelIndex = clickedTab.GetLevelIndex();
+        if (levels != null && levelIndex < levels.Length && levels[levelIndex] != null)
+        {
+            mapManager.LoadLevel(levels[levelIndex]);
+        }
     }
 }

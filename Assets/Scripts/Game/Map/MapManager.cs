@@ -68,13 +68,30 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    void LoadLevel(LevelData currentLevel)
+    void ClearMap()
+    {
+        if (gridParent != null)
+        {
+            for (int i = gridParent.childCount - 1; i >= 0; i--)
+            {
+                Destroy(gridParent.GetChild(i).gameObject);
+            }
+        }
+        
+        currentlySelectedTiles.Clear();
+        selectedEnvType = -1;
+        moveHistory.Clear();
+    }
+
+    public void LoadLevel(LevelData currentLevel)
     {
         if (currentLevel == null)
         {
             Debug.LogError("CurrentLevel is null!");
             return;
         }
+
+        ClearMap();
 
         map = new int[currentLevel.width, currentLevel.height];
         tileBackgroundImages = new Image[currentLevel.width, currentLevel.height];

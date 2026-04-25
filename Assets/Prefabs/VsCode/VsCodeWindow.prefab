@@ -801,6 +801,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32defcb25572bee4d817be830c3bb648, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TabManager
+  levels:
+  - {fileID: 11400000, guid: c6b5f4fd63356544abd33ca04d1d797a, type: 2}
+  - {fileID: 11400000, guid: 6ffce5a462a7bc04b982f588f5db85e5, type: 2}
+  - {fileID: 11400000, guid: 08872bc804b7d3144b8ebaec13cae17a, type: 2}
+  - {fileID: 11400000, guid: 7bdc1911aa1dcf4498c6f285510d5fa4, type: 2}
+  - {fileID: 11400000, guid: 5de8ae5c8d43c984ca9c57fc2b18f019, type: 2}
+  mapManager: {fileID: 2184226229274800952}
 --- !u!1 &2634061778520675426
 GameObject:
   m_ObjectHideFlags: 0
