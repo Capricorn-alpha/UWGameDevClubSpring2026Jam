@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-
 public class MapManager : MonoBehaviour
 {
     public LevelData currentLevel;
@@ -16,6 +15,7 @@ public class MapManager : MonoBehaviour
     [Header("UI Map References")]
     private Image[,] tileBackgroundImages; 
     private Image[,] tilePathImages;
+    private Outline[,] tileOutlines; // Store outline components
 
     [Header("Path Sprites")]
     public Sprite pathVertical;
@@ -24,23 +24,39 @@ public class MapManager : MonoBehaviour
     public Sprite pathCornerTopLeft;
     public Sprite pathCornerBottomRight;
     public Sprite pathCornerBottomLeft;
-    public Sprite pathStartEnd;
+
+    [Header("Selection Settings")]
+    public Color selectionOutlineColor = Color.red;
+    public Color defaultOutlineColor = new Color(0f, 0f, 0f, 0f);
+    private List<Vector2Int> currentlySelectedTiles = new List<Vector2Int>();
 
     private int[,] map;
-    
-    public EnvironmentGroup environmentGroup;
 
     void Start()
     {
         LoadLevel(currentLevel);
     }
 
+    void Update()
+    {
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            HandleTileSelection();
+        }
+    }
+
     void LoadLevel(LevelData currentLevel)
     {
-        map = new int[currentLevel.width, currentLevel.height];
+        if (currentLevel == null)
+        {
+            Debug.LogError("CurrentLevel is null!");
+            return;
+        }
 
+        map = new int[currentLevel.width, currentLevel.height];
         tileBackgroundImages = new Image[currentLevel.width, currentLevel.height];
         tilePathImages = new Image[currentLevel.width, currentLevel.height];
+        tileOutlines = new Outline[currentLevel.width, currentLevel.height];
 
         for(int y = 0; y < currentLevel.height; y++)
         {
@@ -51,8 +67,37 @@ public class MapManager : MonoBehaviour
                 GameObject newTile = Instantiate(tilePrefab, gridParent);
                 newTile.name = $"Tile_{x}_{y}";
 
-                tileBackgroundImages[x, y] = newTile.transform.Find("BG").GetComponent<Image>();
-                tilePathImages[x, y] = newTile.transform.Find("Path").GetComponent<Image>();
+                Transform bgTransform = newTile.transform.Find("BG");
+                Transform pathTransform = newTile.transform.Find("Path");
+                
+                if (bgTransform != null)
+                {
+                    tileBackgroundImages[x, y] = bgTransform.GetComponent<Image>();
+                    
+                    // Get or add Outline component to BG
+                    Outline outline = bgTransform.GetComponent<Outline>();
+                    if (outline == null)
+                    {
+                        outline = bgTransform.gameObject.AddComponent<Outline>();
+                    }
+                    outline.enabled = false; // Start with outline disabled
+                    outline.effectColor = selectionOutlineColor;
+                    outline.effectDistance = new Vector2(3, 3);
+                    tileOutlines[x, y] = outline;
+                }
+                else
+                {
+                    Debug.LogError($"BG transform not found on tile {x},{y}");
+                }
+                    
+                if (pathTransform != null)
+                {
+                    tilePathImages[x, y] = pathTransform.GetComponent<Image>();
+                }
+                else
+                {
+                    Debug.LogError($"Path transform not found on tile {x},{y}");
+                }
             }
         }
         UpdateMapUI();
@@ -66,6 +111,8 @@ public class MapManager : MonoBehaviour
             {
                 int envType = map[x, y];
                 Image bgImage = tileBackgroundImages[x, y];
+                
+                if (bgImage == null) continue;
 
                 if (envType == -1)
                 {
@@ -73,7 +120,10 @@ public class MapManager : MonoBehaviour
                 }
                 else
                 {
-                    bgImage.sprite = environments[envType].map;
+                    if (envType < environments.Length && environments[envType] != null)
+                        bgImage.sprite = environments[envType].map;
+                    else
+                        Debug.LogError($"Environment type {envType} not found!");
                 }
             }
         }
@@ -87,8 +137,11 @@ public class MapManager : MonoBehaviour
         {
             for (int y = 0; y < currentLevel.height; y++)
             {
-                tilePathImages[x, y].sprite = null;
-                tilePathImages[x, y].color = new Color(1, 1, 1, 0);
+                if (tilePathImages[x, y] != null)
+                {
+                    tilePathImages[x, y].sprite = null;
+                    tilePathImages[x, y].color = new Color(1, 1, 1, 0);
+                }
             }
         }
 
@@ -100,11 +153,17 @@ public class MapManager : MonoBehaviour
         for (int i = 0; i < path.Length; i++)
         {
             Vector2Int current = path[i];
+            
+            // Check bounds
+            if (current.x >= currentLevel.width || current.y >= currentLevel.height)
+                continue;
 
             Vector2Int prev = (i > 0) ? path[i - 1] : current;
             Vector2Int next = (i < path.Length - 1) ? path[i + 1] : current;
 
             Image pathOverlay = tilePathImages[current.x, current.y];
+            if (pathOverlay == null) continue;
+            
             pathOverlay.color = new Color(1, 1, 1, 1);
 
             bool down = (prev.y > current.y) || (next.y > current.y);
@@ -147,175 +206,103 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    void HandleTileSelection()
+    {
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        Vector2Int? gridPosition = GetGridPositionFromMouse(mousePosition);
+        
+        if (gridPosition.HasValue)
+        {
+            int x = gridPosition.Value.x;
+            int y = gridPosition.Value.y;
+            
+            if (x >= 0 && x < currentLevel.width && y >= 0 && y < currentLevel.height && map[x, y] != -1)
+            {
+                int clickedEnvType = map[x, y];
+                List<Vector2Int> connectedTiles = GetConnectedTilesOfSameType(x, y, clickedEnvType);
+                ClearSelection();
+                HighlightTiles(connectedTiles);
+                currentlySelectedTiles = connectedTiles;
+            }
+            else
+            {
+                ClearSelection();
+            }
+        }
+    }
 
-    // [Header("Grid Selection")]
-    // public RectTransform map;
-    // public Canvas canvas;
+    Vector2Int? GetGridPositionFromMouse(Vector2 mousePosition)
+    {
+        RectTransform gridRect = gridParent as RectTransform;
+        if (gridRect == null || gridParent.childCount == 0) return null;
+        
+        Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(gridRect, mousePosition, null, out localPoint);
+        
+        RectTransform firstTile = gridParent.GetChild(0) as RectTransform;
+        float tileWidth = firstTile.rect.width;
+        float tileHeight = firstTile.rect.height;
+        
+        int x = Mathf.FloorToInt((localPoint.x + gridRect.rect.width / 2) / tileWidth);
+        int y = Mathf.FloorToInt((-localPoint.y + gridRect.rect.height / 2) / tileHeight);
+        
+        return (x >= 0 && x < currentLevel.width && y >= 0 && y < currentLevel.height) ? new Vector2Int(x, y) : null;
+    }
 
-    // public Color highlightColor = Color.green;
-    // public Vector2 borderSize = new Vector2(10, 10);
-    // private List<GameObject> selectedGroup = null;
+    List<Vector2Int> GetConnectedTilesOfSameType(int startX, int startY, int targetEnvType)
+    {
+        List<Vector2Int> connectedTiles = new List<Vector2Int>();
+        Queue<Vector2Int> tilesToCheck = new Queue<Vector2Int>();
+        bool[,] visited = new bool[currentLevel.width, currentLevel.height];
+        
+        tilesToCheck.Enqueue(new Vector2Int(startX, startY));
+        visited[startX, startY] = true;
+        
+        Vector2Int[] directions = new Vector2Int[] { new Vector2Int(0, 1), new Vector2Int(0, -1), new Vector2Int(-1, 0), new Vector2Int(1, 0) };
+        
+        while (tilesToCheck.Count > 0)
+        {
+            Vector2Int current = tilesToCheck.Dequeue();
+            
+            if (map[current.x, current.y] == targetEnvType)
+            {
+                connectedTiles.Add(current);
+                
+                foreach (Vector2Int dir in directions)
+                {
+                    int newX = current.x + dir.x;
+                    int newY = current.y + dir.y;
+                    
+                    if (newX >= 0 && newX < currentLevel.width && newY >= 0 && newY < currentLevel.height && !visited[newX, newY])
+                    {
+                        visited[newX, newY] = true;
+                        tilesToCheck.Enqueue(new Vector2Int(newX, newY));
+                    }
+                }
+            }
+        }
+        return connectedTiles;
+    }
 
-    // [Header("Grid Movement")]
-    // public float cellSize = 150f;
-    // public int mapSize = 5;
-    // private EnvironmentGroup group;
-    // private Dictionary<Sprite, List<GameObject>> environmentDictionary;
+    void HighlightTiles(List<Vector2Int> tiles)
+    {
+        foreach (Vector2Int tile in tiles)
+        {
+            if (tileOutlines[tile.x, tile.y] != null)
+            {
+                tileOutlines[tile.x, tile.y].enabled = true;
+                tileOutlines[tile.x, tile.y].effectColor = selectionOutlineColor;
+            }
+        }
+    }
 
-    // void Start()
-    // {
-    //     group = GetComponent<EnvironmentGroup>();
-    //     environmentDictionary = group.GetGroup(map);
-    // }
-
-    // void Update()
-    // {
-    //     if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-    //     {
-    //         DetectClick();
-    //     }
-
-    //     HandleMovement();
-    // }
-
-    // void HandleMovement()
-    // {
-    //     if (selectedGroup == null)
-    //         return;
-
-    //     Vector2 move = Vector2.zero;
-
-    //     if (Keyboard.current.wKey.wasPressedThisFrame)
-    //         move = Vector2.up;
-    //     else if (Keyboard.current.sKey.wasPressedThisFrame)
-    //         move = Vector2.down;
-    //     else if (Keyboard.current.aKey.wasPressedThisFrame)
-    //         move = Vector2.left;
-    //     else if (Keyboard.current.dKey.wasPressedThisFrame)
-    //         move = Vector2.right;
-
-    //     if (move == Vector2.zero)
-    //         return;
-
-    //     Vector2 offset = move * cellSize;
-
-    //     if (CanMoveGroup(offset))
-    //     {
-    //         foreach (GameObject obj in selectedGroup)
-    //         {
-    //             RectTransform rect = obj.GetComponent<RectTransform>();
-    //             rect.anchoredPosition += offset;
-    //         }
-    //     }
-    // }
-
-    // bool CanMoveGroup(Vector2 direction)
-    // {
-    //     float halfMap = (mapSize - 1) * cellSize / 2f;
-
-    //     foreach (GameObject obj in selectedGroup)
-    //     {
-    //         RectTransform rect = obj.GetComponent<RectTransform>();
-    //         Vector2 currentPos = rect.anchoredPosition;
-
-    //         if (direction == Vector2.right && currentPos.x >= halfMap)
-    //             return false;
-
-    //         if (direction == Vector2.left && currentPos.x <= -halfMap)
-    //             return false;
-
-    //         if (direction == Vector2.up && currentPos.y >= halfMap)
-    //             return false;
-
-    //         if (direction == Vector2.down && currentPos.y <= -halfMap)
-    //             return false;
-    //     }
-
-    //     return true;
-    // }
-
-    // void DetectClick()
-    // {
-    //     Vector2 mousePos = Mouse.current.position.ReadValue();
-
-    //     Camera cam = null;
-    //     if (canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay)
-    //     {
-    //         cam = canvas.worldCamera;
-    //     }
-
-    //     foreach (var pair in environmentDictionary)
-    //     {
-    //         Sprite keySprite = pair.Key;
-
-    //         // Ignore map background
-    //         if (keySprite == null || keySprite.name == "Map")
-    //             continue;
-
-    //         foreach (GameObject obj in pair.Value)
-    //         {
-    //             RectTransform rect = obj.GetComponent<RectTransform>();
-
-    //             if (rect != null &&
-    //                 RectTransformUtility.RectangleContainsScreenPoint(rect, mousePos, cam))
-    //             {
-    //                 // If clicking selected group again, deselect
-    //                 if (selectedGroup == pair.Value)
-    //                 {
-    //                     ClearSelection();
-    //                 }
-    //                 else
-    //                 {
-    //                     SelectGroup(pair.Value);
-    //                 }
-
-    //                 return;
-    //             }
-    //         }
-    //     }
-    // }
-
-    // void SelectGroup(List<GameObject> groupToSelect)
-    // {
-    //     ClearSelection();
-
-    //     selectedGroup = groupToSelect;
-
-    //     foreach (GameObject environment in selectedGroup)
-    //     {
-    //         Transform bg = environment.transform.Find("BG");
-
-    //         if (bg == null)
-    //             continue;
-
-    //         Outline outline = bg.GetComponent<Outline>();
-
-    //         if (outline == null)
-    //             outline = bg.gameObject.AddComponent<Outline>();
-
-    //         outline.effectColor = highlightColor;
-    //         outline.effectDistance = borderSize;
-    //     }
-    // }
-
-    // void ClearSelection()
-    // {
-    //     if (selectedGroup == null)
-    //         return;
-
-    //     foreach (GameObject environment in selectedGroup)
-    //     {
-    //         Transform bg = environment.transform.Find("BG");
-
-    //         if (bg == null)
-    //             continue;
-
-    //         Outline outline = bg.GetComponent<Outline>();
-
-    //         if (outline != null)
-    //             Destroy(outline);
-    //     }
-
-    //     selectedGroup = null;
-    // }
+    void ClearSelection()
+    {
+        foreach (Vector2Int tile in currentlySelectedTiles)
+        {
+            if (tileOutlines[tile.x, tile.y] != null)
+                tileOutlines[tile.x, tile.y].enabled = false;
+        }
+        currentlySelectedTiles.Clear();
+    }
 }
