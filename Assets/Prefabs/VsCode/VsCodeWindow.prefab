@@ -845,7 +845,6 @@ GameObject:
   - component: {fileID: -3188333423700746218}
   - component: {fileID: 8018262267413150145}
   - component: {fileID: 6495527180098631079}
-  - component: {fileID: 9129411093833286592}
   - component: {fileID: 2184226229274800952}
   m_Layer: 5
   m_Name: VsCodeWindow
@@ -931,18 +930,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WindowBase
   closeButton: {fileID: 4067754254472292694}
---- !u!114 &9129411093833286592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3987012799175295642}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50b243ce29e18594f965d01225b6254f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnvironmentGroup
 --- !u!114 &2184226229274800952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -955,7 +942,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6578831a9bf350a479ad5aa0620ca706, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapManager
-  currentLevel: {fileID: 11400000, guid: c6b5f4fd63356544abd33ca04d1d797a, type: 2}
+  currentLevel: {fileID: 11400000, guid: 6aa41d52bdfad6d4485a962debff499b, type: 2}
   environments:
   - {fileID: 11400000, guid: d0fbb8f96f6eb1c43b8a475657123f05, type: 2}
   - {fileID: 11400000, guid: 275f1b103cf4e994aad4980f284016ed, type: 2}
@@ -973,10 +960,8 @@ MonoBehaviour:
   pathCornerTopLeft: {fileID: 21300000, guid: 28b0f9529f89b1a4da46f4dc9533e52a, type: 3}
   pathCornerBottomRight: {fileID: 21300000, guid: f7152922c141a4745bd92fe698018adf, type: 3}
   pathCornerBottomLeft: {fileID: 21300000, guid: 4cd3add2f2351da418299a7e73b0a029, type: 3}
-  pathStartEnd: {fileID: 21300000, guid: b575cd2a97ce7804389e3c26bdb6f59b, type: 3}
   selectionOutlineColor: {r: 1, g: 0, b: 0, a: 1}
-  outlineThickness: 5
-  environmentGroup: {fileID: 9129411093833286592}
+  defaultOutlineColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &4049564369392541667
 GameObject:
   m_ObjectHideFlags: 0
