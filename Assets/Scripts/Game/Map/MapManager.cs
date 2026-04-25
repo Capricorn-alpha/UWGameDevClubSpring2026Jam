@@ -91,6 +91,8 @@ public class MapManager : MonoBehaviour
             return;
         }
 
+        this.currentLevel = currentLevel;
+
         ClearMap();
 
         map = new int[currentLevel.width, currentLevel.height];
