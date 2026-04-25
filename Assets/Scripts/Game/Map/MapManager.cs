@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using Events;
+
 public class MapManager : MonoBehaviour
 {
     public LevelData currentLevel;
@@ -232,7 +234,32 @@ public class MapManager : MonoBehaviour
         EventBus.Publish(new VscodeScoreEvent(environmentCounts));
     }
 
+     void HandleTileSelection()
+    {
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        Vector2Int? gridPosition = GetGridPositionFromMouse(mousePosition);
+        
+        if (gridPosition.HasValue)
+        {
+            int x = gridPosition.Value.x;
+            int y = gridPosition.Value.y;
+            
+            if (x >= 0 && x < currentLevel.width && y >= 0 && y < currentLevel.height && map[x, y] != -1)
+            {
+                int clickedEnvType = map[x, y];
+                List<Vector2Int> connectedTiles = GetConnectedTilesOfSameType(x, y, clickedEnvType);
+                ClearSelection();
+                HighlightTiles(connectedTiles);
+                currentlySelectedTiles = connectedTiles;
+            }
+            else
+            {
+                ClearSelection();
 
+            }
+        }
+    }
+    
     Vector2Int? GetGridPositionFromMouse(Vector2 mousePosition)
     {
         RectTransform gridRect = gridParent as RectTransform;
