@@ -7,8 +7,6 @@ using Events;
 
 public class AgendaController : MonoBehaviour
 {
-    public GameObject postPrefab;
-    private Queue<GameObject> postPrefabQueue;
     public TMP_Text dayCounter;
     public TMP_Text agendaText;
     private int day;
@@ -18,8 +16,6 @@ public class AgendaController : MonoBehaviour
     public void Start()
     {
         day = 1;
-        postPrefabQueue = new Queue<GameObject>();
-        Instantiate(postPrefab);
         dayStarted = false;
         dayCounter.text = "Day " + day.ToString();
     }
@@ -27,18 +23,6 @@ public class AgendaController : MonoBehaviour
     public void Update()
     {
         ShowAgenda();
-    }
-
-    // Add a new post prefab to the queue
-    public void AddPostPrefab(GameObject postPrefab)
-    {
-        postPrefabQueue.Enqueue(postPrefab);
-        agendaText.text += "- " + postPrefab.name + "\n";
-
-        if (!dayStarted)
-        {
-            dayStarted = true;
-        }
     }
 
     // Show all tasks in the agenda when the player clicks the vscode icon
@@ -63,23 +47,7 @@ public class AgendaController : MonoBehaviour
         day++;
         dayCounter.text = "Day " + day.ToString();
         agendaText.text = "Agenda for Day " + day.ToString() + ":\n";
-        postPrefabQueue.Clear();
 
         EventBus.Publish(new DayChangedEvent(day));
-    }
-
-    // Mark the task as completed
-    public void CompleteTask()
-    {
-        agendaText.text = agendaText.text.Replace("- " + postPrefabQueue.Dequeue().name + "\n", "");
-    }
-
-    // Mark all agenda as completed
-    public void CompleteAgenda()
-    {
-        if (bugs == 0)
-        {
-            agendaText.text = "Agenda for Day " + day.ToString() + ":\n- All tasks completed!";
-        }
     }
 }
