@@ -1082,7 +1082,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1659cb2f5b0231448a90f2444b0f36dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AgendaController
-  postPrefab: {fileID: 8990128236684968404, guid: 48891c27399778a45acd622d44d98bc4, type: 3}
   dayCounter: {fileID: 4487867219028924224}
   agendaText: {fileID: 2084426274020663220}
 --- !u!114 &2184226229274800952
@@ -1914,8 +1913,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
