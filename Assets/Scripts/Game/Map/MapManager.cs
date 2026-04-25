@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using Events;
 
 public class MapManager : MonoBehaviour
 {
@@ -145,6 +146,32 @@ public class MapManager : MonoBehaviour
                 pathOverlay.sprite = pathHorizontal;
             }
         }
+    }
+
+    public void OnSubmitButtonClicked()
+    {
+        int[] environmentCounts = new int[7];
+
+        if(currentLevel.pathCoordinates != null && currentLevel.pathCoordinates.Length > 0)
+        {
+            foreach(Vector2Int coord in currentLevel.pathCoordinates)
+            {
+                if(coord.x >= 0 && coord.x < currentLevel.width && 
+                    coord.y >= 0 && coord.y < currentLevel.height)
+                {
+                    int envType = map[coord.x, coord.y];
+                    
+                    if(envType >= 0 && envType < environments.Length)
+                    {
+                        environmentCounts[envType]++;
+                    }
+                }
+            }
+        }
+
+        Debug.Log($"结算完成! 水:{environmentCounts[0]}, 草:{environmentCounts[1]}, 石:{environmentCounts[2]}, 水草:{environmentCounts[3]}, 水石:{environmentCounts[4]}, 草石:{environmentCounts[5]}, 水草石:{environmentCounts[6]}");
+
+        EventBus.Publish(new VscodeScoreEvent(environmentCounts));
     }
 
 

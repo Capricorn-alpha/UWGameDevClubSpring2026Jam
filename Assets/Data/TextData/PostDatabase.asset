@@ -24,3 +24,93 @@ MonoBehaviour:
     userName: Amiibofan101
     postBody: There is a bug
     postScore: 111
+  - postId: 2
+    postCondition:
+      minDays: 2
+      maxDays: 3
+      minScore: 0
+      maxScore: 0.3
+      isFixed: 0
+    userProfile: {fileID: 0}
+    userName: ShipWrecker1239
+    postBody: Why does item still disappear when thrown on water are you guys even
+      fixing any bugs
+    postScore: 111
+  - postId: 3
+    postCondition:
+      minDays: 2
+      maxDays: 3
+      minScore: 0
+      maxScore: 0.3
+      isFixed: 0
+    userProfile: {fileID: 0}
+    userName: SquidAvocado8802
+    postBody: "I can\u2019t destroy grass"
+    postScore: 23
+  - postId: 4
+    postCondition:
+      minDays: 4
+      maxDays: 5
+      minScore: 0
+      maxScore: 0.3
+      isFixed: 0
+    userProfile: {fileID: 0}
+    userName: WindFisher4582
+    postBody: The inventory size is fixed but you can still over-stack
+    postScore: 114
+  - postId: 5
+    postCondition:
+      minDays: 2
+      maxDays: 4
+      minScore: 0.5
+      maxScore: 0.8
+      isFixed: 0
+    userProfile: {fileID: 0}
+    userName: ConcreteCity45678
+    postBody: Guys you can duplicate items by stuffing them between rocks and water
+      surface and keep hitting them down
+    postScore: 514
+  - postId: 6
+    postCondition:
+      minDays: 2
+      maxDays: 3
+      minScore: 0
+      maxScore: 0.3
+      isFixed: 0
+    userProfile: {fileID: 0}
+    userName: RageRat111
+    postBody: "What\u2019s up with the crafting I can\u2019t put on any item"
+    postScore: 67
+  - postId: 7
+    postCondition:
+      minDays: 2
+      maxDays: 5
+      minScore: 0
+      maxScore: 0.3
+      isFixed: 0
+    userProfile: {fileID: 0}
+    userName: Froghead18364
+    postBody: I can launch myself by jumping on to a tree hidden within a swamp!
+    postScore: 799
+  - postId: 8
+    postCondition:
+      minDays: 2
+      maxDays: 4
+      minScore: 0
+      maxScore: 0.5
+      isFixed: 0
+    userProfile: {fileID: 0}
+    userName: OhYeahSun452
+    postBody: Why did you fixed the item duplication??? That was so useful!!!
+    postScore: 325
+  - postId: 9
+    postCondition:
+      minDays: 1
+      maxDays: 3
+      minScore: 0.2
+      maxScore: 0.6
+      isFixed: 0
+    userProfile: {fileID: 0}
+    userName: CookieGood5927
+    postBody: If you throw pebbles into the waters they bounce like crazy lol
+    postScore: 328

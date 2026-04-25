@@ -16,10 +16,68 @@ MonoBehaviour:
   - condition:
       minDays: 1
       maxDays: 3
-      minScore: 0
+      minScore: 0.6
       maxScore: 1
       isPositive: 1
     UserName: ILoveCUteCats
     ReviewContent: I loved how much freedom I had in building various tunnels and
       mines. It really does feel like you get to build your own little underground
       world.
+  - condition:
+      minDays: 2
+      maxDays: 3
+      minScore: 0
+      maxScore: 0.2
+      isPositive: 0
+    UserName: Abracadabra2000
+    ReviewContent: 'Great game! Totally loved when the crafting made infinite dirt!
+      10/10 Absolutely, wonderful. Just great. '
+  - condition:
+      minDays: 1
+      maxDays: 2
+      minScore: 0.4
+      maxScore: 1
+      isPositive: 1
+    UserName: Abracadabra2000
+    ReviewContent: 'A fun time. I liked the monsters creeping up on you silently.
+      You really have to be aware of your surroundings while you are digging. '
+  - condition:
+      minDays: 2
+      maxDays: 3
+      minScore: 0
+      maxScore: 0.4
+      isPositive: 1
+    UserName: DaResidentPresident
+    ReviewContent: 'Not a vibe. Horrible VIBE. Whoever told the dev that the background
+      music should sound like an amoeba should go to jail. '
+  - condition:
+      minDays: 2
+      maxDays: 5
+      minScore: 0.5
+      maxScore: 1
+      isPositive: 1
+    UserName: Gnome5324924
+    ReviewContent: S tier rizzler.
+  - condition:
+      minDays: 3
+      maxDays: 5
+      minScore: 0
+      maxScore: 0.1
+      isPositive: 1
+    UserName: PeteEatsDemPeanuts
+    ReviewContent: "Never have I ever hated a game more passionately than this. This
+      developer needs to be blocked from every single game company ever created.
+      They need to be barred from the industry. They are a literal pest, like the
+      bugs in this game. It is riddled with them. Someone call the bug busters because
+      this is an actual crime against humanity. This game would win worst game at
+      the game show awards if they had that for a category. Forget concord, THIS,
+      is humanity\u2019s worst enemy. \r\n0/10"
+  - condition:
+      minDays: 3
+      maxDays: 5
+      minScore: 0.4
+      maxScore: 1
+      isPositive: 1
+    UserName: GachaTheGotcha
+    ReviewContent: Never gonna give you up, never gonna let you down, never gonna
+      run around and desert you UwU
