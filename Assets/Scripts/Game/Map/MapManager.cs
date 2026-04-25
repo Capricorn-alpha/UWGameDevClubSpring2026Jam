@@ -31,6 +31,7 @@ public class MapManager : MonoBehaviour
     public Color selectionOutlineColor = Color.red;
     public Color defaultOutlineColor = new Color(0f, 0f, 0f, 0f);
     private List<Vector2Int> currentlySelectedTiles = new List<Vector2Int>();
+    private int selectedEnvType = -1;
 
     private int[,] map;
 
@@ -44,6 +45,19 @@ public class MapManager : MonoBehaviour
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
             HandleTileSelection();
+        }
+
+        Debug.Log(selectedEnvType);
+        if (currentlySelectedTiles.Count > 0 && selectedEnvType != -1)
+        {
+            Vector2 moveDirection = Vector2.zero;
+            if (Keyboard.current.sKey.wasPressedThisFrame) moveDirection = Vector2.up;
+            else if (Keyboard.current.wKey.wasPressedThisFrame) moveDirection = Vector2.down;
+            else if (Keyboard.current.aKey.wasPressedThisFrame) moveDirection = Vector2.left;
+            else if (Keyboard.current.dKey.wasPressedThisFrame) moveDirection = Vector2.right;
+            
+            if (moveDirection != Vector2.zero)
+                MoveSelectedGroup(moveDirection);
         }
     }
 
@@ -247,6 +261,7 @@ public class MapManager : MonoBehaviour
             if (x >= 0 && x < currentLevel.width && y >= 0 && y < currentLevel.height && map[x, y] != -1)
             {
                 int clickedEnvType = map[x, y];
+                selectedEnvType = clickedEnvType;
                 List<Vector2Int> connectedTiles = GetConnectedTilesOfSameType(x, y, clickedEnvType);
                 ClearSelection();
                 HighlightTiles(connectedTiles);
@@ -255,7 +270,6 @@ public class MapManager : MonoBehaviour
             else
             {
                 ClearSelection();
-
             }
         }
     }
@@ -333,5 +347,51 @@ public class MapManager : MonoBehaviour
                 tileOutlines[tile.x, tile.y].enabled = false;
         }
         currentlySelectedTiles.Clear();
+    }
+
+    void MoveSelectedGroup(Vector2Int direction)
+    {
+        // Calculate new positions
+        List<Vector2Int> newPositions = new List<Vector2Int>();
+        foreach (Vector2Int tile in currentlySelectedTiles)
+        {
+            Vector2Int newPos = new Vector2Int(tile.x + direction.x, tile.y + direction.y);
+            
+            // Check bounds
+            if (newPos.x < 0 || newPos.x >= currentLevel.width || 
+                newPos.y < 0 || newPos.y >= currentLevel.height)
+                return; // Can't move outside bounds
+            newPositions.Add(newPos);
+        }
+        
+        // Check if new positions are valid (empty or same type)
+        foreach (Vector2Int newPos in newPositions)
+        {
+            if (map[newPos.x, newPos.y] != -1 && map[newPos.x, newPos.y] != selectedEnvType)
+                return; // Can't move onto different environment type
+        }
+        
+        // Clear old positions (set to -1 or default)
+        foreach (Vector2Int oldPos in currentlySelectedTiles)
+        {
+            map[oldPos.x, oldPos.y] = -1; // Or whatever your default empty value is
+        }
+        
+        // Set new positions to selected environment type
+        foreach (Vector2Int newPos in newPositions)
+        {
+            map[newPos.x, newPos.y] = selectedEnvType;
+        }
+        
+        // Update selection and UI
+        currentlySelectedTiles = newPositions;
+        ClearSelection(); // Remove old outlines
+        HighlightTiles(currentlySelectedTiles); // Add new outlines
+        UpdateMapUI();
+    }
+
+    void MoveSelectedGroup(Vector2 direction)
+    {
+        MoveSelectedGroup(new Vector2Int((int)direction.x, (int)direction.y));
     }
 }
