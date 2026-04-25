@@ -17,7 +17,7 @@ public class MapManager : MonoBehaviour
     [Header("UI Map References")]
     private Image[,] tileBackgroundImages; 
     private Image[,] tilePathImages;
-    private Outline[,] tileOutlines; // Store outline components
+    private Outline[,] tileOutlines;
 
     [Header("Path Sprites")]
     public Sprite pathVertical;
@@ -30,12 +30,12 @@ public class MapManager : MonoBehaviour
     [Header("Selection Settings")]
     public Color selectionOutlineColor = Color.red;
     public Color defaultOutlineColor = new Color(0f, 0f, 0f, 0f);
+    
     private List<Vector2Int> currentlySelectedTiles = new List<Vector2Int>();
     private int selectedEnvType = -1;
     private Stack<(int[,] mapSnapshot, List<Vector2Int> selectedSnapshot, int selectedEnvSnapshot)> moveHistory 
         = new Stack<(int[,], List<Vector2Int>, int)>();
     
-
     private int[,] map;
 
     void Start()
@@ -97,13 +97,12 @@ public class MapManager : MonoBehaviour
                 {
                     tileBackgroundImages[x, y] = bgTransform.GetComponent<Image>();
                     
-                    // Get or add Outline component to BG
                     Outline outline = bgTransform.GetComponent<Outline>();
                     if (outline == null)
                     {
                         outline = bgTransform.gameObject.AddComponent<Outline>();
                     }
-                    outline.enabled = false; // Start with outline disabled
+                    outline.enabled = false;
                     outline.effectColor = selectionOutlineColor;
                     outline.effectDistance = new Vector2(3, 3);
                     tileOutlines[x, y] = outline;
@@ -123,7 +122,11 @@ public class MapManager : MonoBehaviour
                 }
             }
         }
+        
         UpdateMapUI();
+        
+        // Find all connected groups and add bugs
+        RefreshAllBugs();
     }
 
     void UpdateMapUI()
@@ -177,7 +180,6 @@ public class MapManager : MonoBehaviour
         {
             Vector2Int current = path[i];
             
-            // Check bounds
             if (current.x >= currentLevel.width || current.y >= currentLevel.height)
                 continue;
 
@@ -255,7 +257,7 @@ public class MapManager : MonoBehaviour
         EventBus.Publish(new VscodeScoreEvent(environmentCounts));
     }
 
-     void HandleTileSelection()
+    void HandleTileSelection()
     {
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         Vector2Int? gridPosition = GetGridPositionFromMouse(mousePosition);
@@ -358,7 +360,10 @@ public class MapManager : MonoBehaviour
 
     void MoveSelectedGroup(Vector2Int direction)
     {
+        if (currentlySelectedTiles.Count == 0) return;
+        
         SaveState();
+        
         // Calculate new positions
         List<Vector2Int> newPositions = new List<Vector2Int>();
         foreach (Vector2Int tile in currentlySelectedTiles)
@@ -373,7 +378,6 @@ public class MapManager : MonoBehaviour
         
         // Store old values and collect overlapping types
         Dictionary<Vector2Int, HashSet<int>> overlappingTypes = new Dictionary<Vector2Int, HashSet<int>>();
-        Dictionary<Vector2Int, int> originalTypes = new Dictionary<Vector2Int, int>();
         
         for (int i = 0; i < currentlySelectedTiles.Count; i++)
         {
@@ -386,17 +390,14 @@ public class MapManager : MonoBehaviour
                     overlappingTypes[newPos] = new HashSet<int>();
                 overlappingTypes[newPos].Add(existingType);
                 overlappingTypes[newPos].Add(selectedEnvType);
-                originalTypes[newPos] = existingType;
             }
         }
         
-        // Clear old positions (only if they're not overlapping with something)
+        // Clear old positions
         for (int i = 0; i < currentlySelectedTiles.Count; i++)
         {
             Vector2Int oldPos = currentlySelectedTiles[i];
-            Vector2Int newPos = newPositions[i];
             
-            // Only clear if this tile isn't overlapping with another moving tile
             bool isOverlapping = false;
             for (int j = 0; j < newPositions.Count; j++)
             {
@@ -428,7 +429,6 @@ public class MapManager : MonoBehaviour
             {
                 map[newPos.x, newPos.y] = selectedEnvType;
             }
-            // else keep original index (do nothing)
         }
         
         // Update selection and UI
@@ -436,6 +436,9 @@ public class MapManager : MonoBehaviour
         ClearSelection();
         HighlightTiles(currentlySelectedTiles);
         UpdateMapUI();
+        
+        // Refresh bugs
+        RefreshAllBugs();
     }
 
     void MoveSelectedGroup(Vector2 direction)
@@ -458,13 +461,11 @@ public class MapManager : MonoBehaviour
 
     void SaveState()
     {
-        // Copy current map
         int[,] mapCopy = new int[currentLevel.width, currentLevel.height];
         for (int x = 0; x < currentLevel.width; x++)
             for (int y = 0; y < currentLevel.height; y++)
                 mapCopy[x, y] = map[x, y];
         
-        // Copy selected tiles
         List<Vector2Int> selectedCopy = new List<Vector2Int>(currentlySelectedTiles);
         
         moveHistory.Push((mapCopy, selectedCopy, selectedEnvType));
@@ -476,19 +477,98 @@ public class MapManager : MonoBehaviour
         
         var previousState = moveHistory.Pop();
         
-        // Restore map
         for (int x = 0; x < currentLevel.width; x++)
             for (int y = 0; y < currentLevel.height; y++)
                 map[x, y] = previousState.mapSnapshot[x, y];
         
-        // Restore selection
         ClearSelection();
         currentlySelectedTiles = previousState.selectedSnapshot;
         selectedEnvType = previousState.selectedEnvSnapshot;
         HighlightTiles(currentlySelectedTiles);
         
         UpdateMapUI();
+        RefreshAllBugs();
     }
 
+    void SetBugForGroup(List<Vector2Int> group, int bugIndex)
+    {
+        if (group.Count == 0) return;
+        
+        Vector2Int bugTile = group[group.Count / 2];
+        
+        // Get the tile GameObject first
+        Transform tileTransform = tileBackgroundImages[bugTile.x, bugTile.y].transform.parent;
+        
+        // Find Bug as a child of the tile (sibling of BG)
+        Transform bugTransform = tileTransform.Find("Bug");
+        
+        if (bugTransform != null)
+        {
+            Image bugImage = bugTransform.GetComponent<Image>();
+            if (bugImage != null)
+            {
+                string bugPath = "";
+                switch(bugIndex)
+                {
+                    case 0:
+                        bugPath = "Bugs/Bug2";
+                        break;
+                    case 1:
+                        bugPath = "Bugs/Bug1";
+                        break;
+                    case 2:
+                        bugPath = "Bugs/Bug3";
+                        break;
+                    default:
+                        bugImage.sprite = null;
+                        bugImage.enabled = false;
+                        return;
+                }
+                
+                Sprite bugSprite = Resources.Load<Sprite>(bugPath);
+                bugImage.sprite = bugSprite;
+                bugImage.enabled = true;
+            }
+        }
+    }
 
+    void ClearAllBugs()
+    {
+        for (int x = 0; x < currentLevel.width; x++)
+        {
+            for (int y = 0; y < currentLevel.height; y++)
+            {
+                Transform tileTransform = tileBackgroundImages[x, y].transform.parent;
+                Transform bugTransform = tileTransform.Find("Bug");
+                if (bugTransform != null)
+                {
+                    Image bugImage = bugTransform.GetComponent<Image>();
+                    if (bugImage != null)
+                    {
+                        bugImage.sprite = null;
+                        bugImage.enabled = false;
+                    }
+                }
+            }
+        }
+    }
+
+    void RefreshAllBugs()
+    {
+        ClearAllBugs();
+        bool[,] visited = new bool[currentLevel.width, currentLevel.height];
+        for (int x = 0; x < currentLevel.width; x++)
+        {
+            for (int y = 0; y < currentLevel.height; y++)
+            {
+                if (!visited[x, y] && (map[x, y] == 0 || map[x, y] == 1 || map[x, y] == 2))
+                {
+                    List<Vector2Int> group = GetConnectedTilesOfSameType(x, y, map[x, y]);
+                    foreach (Vector2Int tile in group)
+                        visited[tile.x, tile.y] = true;
+                    SetBugForGroup(group, map[x, y]);
+                }
+            }
+        }
+    }
 }
