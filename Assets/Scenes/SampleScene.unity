@@ -1736,10 +1736,10 @@ MonoBehaviour:
   ratingNormalized: 0.75
   reviewsCount: 456
   politeReplyDelta: 0.03
-  rudeReplyDelta: -0.1
+  rudeReplyDelta: -0.05
   reviewCountDeltaPerAction: 8
   gridCount: 00000000000000000000000000000000000000000000000000000000
-  gridScore: 00000000000000000000000000000000000000000000000000000000
+  gridScore: 19000000f6ffffffecffffff05000000f1ffffff3200000014000000
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

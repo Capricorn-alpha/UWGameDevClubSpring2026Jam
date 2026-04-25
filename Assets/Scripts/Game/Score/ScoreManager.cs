@@ -75,7 +75,31 @@ public class ScoreManager : Singleton<ScoreManager>, IEventReceiver<AfterReplyCo
 
     private void ApplyVscodeScore(int[] counts)
     {
-        
+        float totalQualityScore = 10f;
+
+        for (int i = 0; i < counts.Length; i++)
+        {
+            gridCount[i] = counts[i];
+
+            totalQualityScore += counts[i] * gridScore[i];
+        }
+
+        float targetNormalizedScore = totalQualityScore / 100f;
+
+        float deltaToApply = ratingNormalized + targetNormalizedScore;
+
+        if(deltaToApply > 1f)
+        {
+            deltaToApply = 1f;
+        }
+        else if(deltaToApply < 0f)
+        {
+            deltaToApply = 0f;
+        }
+
+        ApplyReviewChange(deltaToApply, 1);
+
+        Debug.Log($"[ScoreManager] 盘面总分计算为: {totalQualityScore}，当前 Normalized 目标为: {targetNormalizedScore}，应用 Delta: {deltaToApply}");
     }
 
     private void ApplyReviewChange(float scoreDelta, int countDelta)
