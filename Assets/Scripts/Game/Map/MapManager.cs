@@ -32,6 +32,9 @@ public class MapManager : MonoBehaviour
     public Color defaultOutlineColor = new Color(0f, 0f, 0f, 0f);
     private List<Vector2Int> currentlySelectedTiles = new List<Vector2Int>();
     private int selectedEnvType = -1;
+    private Stack<(int[,] mapSnapshot, List<Vector2Int> selectedSnapshot, int selectedEnvSnapshot)> moveHistory 
+        = new Stack<(int[,], List<Vector2Int>, int)>();
+    
 
     private int[,] map;
 
@@ -47,7 +50,6 @@ public class MapManager : MonoBehaviour
             HandleTileSelection();
         }
 
-        Debug.Log(selectedEnvType);
         if (currentlySelectedTiles.Count > 0 && selectedEnvType != -1)
         {
             Vector2 moveDirection = Vector2.zero;
@@ -58,6 +60,11 @@ public class MapManager : MonoBehaviour
             
             if (moveDirection != Vector2.zero)
                 MoveSelectedGroup(moveDirection);
+        }
+
+        if (Keyboard.current.zKey.wasPressedThisFrame && (Keyboard.current.ctrlKey.isPressed || Keyboard.current.leftCtrlKey.isPressed))
+        {
+            Undo();
         }
     }
 
@@ -351,42 +358,83 @@ public class MapManager : MonoBehaviour
 
     void MoveSelectedGroup(Vector2Int direction)
     {
+        SaveState();
         // Calculate new positions
         List<Vector2Int> newPositions = new List<Vector2Int>();
         foreach (Vector2Int tile in currentlySelectedTiles)
         {
             Vector2Int newPos = new Vector2Int(tile.x + direction.x, tile.y + direction.y);
             
-            // Check bounds
             if (newPos.x < 0 || newPos.x >= currentLevel.width || 
                 newPos.y < 0 || newPos.y >= currentLevel.height)
-                return; // Can't move outside bounds
+                return;
             newPositions.Add(newPos);
         }
         
-        // Check if new positions are valid (empty or same type)
-        foreach (Vector2Int newPos in newPositions)
+        // Store old values and collect overlapping types
+        Dictionary<Vector2Int, HashSet<int>> overlappingTypes = new Dictionary<Vector2Int, HashSet<int>>();
+        Dictionary<Vector2Int, int> originalTypes = new Dictionary<Vector2Int, int>();
+        
+        for (int i = 0; i < currentlySelectedTiles.Count; i++)
         {
-            if (map[newPos.x, newPos.y] != -1 && map[newPos.x, newPos.y] != selectedEnvType)
-                return; // Can't move onto different environment type
+            Vector2Int newPos = newPositions[i];
+            int existingType = map[newPos.x, newPos.y];
+            
+            if (existingType != -1)
+            {
+                if (!overlappingTypes.ContainsKey(newPos))
+                    overlappingTypes[newPos] = new HashSet<int>();
+                overlappingTypes[newPos].Add(existingType);
+                overlappingTypes[newPos].Add(selectedEnvType);
+                originalTypes[newPos] = existingType;
+            }
         }
         
-        // Clear old positions (set to -1 or default)
-        foreach (Vector2Int oldPos in currentlySelectedTiles)
+        // Clear old positions (only if they're not overlapping with something)
+        for (int i = 0; i < currentlySelectedTiles.Count; i++)
         {
-            map[oldPos.x, oldPos.y] = -1; // Or whatever your default empty value is
+            Vector2Int oldPos = currentlySelectedTiles[i];
+            Vector2Int newPos = newPositions[i];
+            
+            // Only clear if this tile isn't overlapping with another moving tile
+            bool isOverlapping = false;
+            for (int j = 0; j < newPositions.Count; j++)
+            {
+                if (i != j && newPositions[j] == oldPos)
+                {
+                    isOverlapping = true;
+                    break;
+                }
+            }
+            
+            if (!isOverlapping && !overlappingTypes.ContainsKey(oldPos))
+            {
+                map[oldPos.x, oldPos.y] = -1;
+            }
         }
         
-        // Set new positions to selected environment type
-        foreach (Vector2Int newPos in newPositions)
+        // Apply new positions with possible combinations
+        for (int i = 0; i < currentlySelectedTiles.Count; i++)
         {
-            map[newPos.x, newPos.y] = selectedEnvType;
+            Vector2Int newPos = newPositions[i];
+            
+            if (overlappingTypes.ContainsKey(newPos))
+            {
+                int combinedType = GetCombinedType(overlappingTypes[newPos]);
+                if (combinedType != -1)
+                    map[newPos.x, newPos.y] = combinedType;
+            }
+            else if (map[newPos.x, newPos.y] == -1)
+            {
+                map[newPos.x, newPos.y] = selectedEnvType;
+            }
+            // else keep original index (do nothing)
         }
         
         // Update selection and UI
         currentlySelectedTiles = newPositions;
-        ClearSelection(); // Remove old outlines
-        HighlightTiles(currentlySelectedTiles); // Add new outlines
+        ClearSelection();
+        HighlightTiles(currentlySelectedTiles);
         UpdateMapUI();
     }
 
@@ -394,4 +442,53 @@ public class MapManager : MonoBehaviour
     {
         MoveSelectedGroup(new Vector2Int((int)direction.x, (int)direction.y));
     }
+
+    int GetCombinedType(HashSet<int> environmentTypes)
+    {
+        if (environmentTypes.Contains(0) && environmentTypes.Contains(1) && environmentTypes.Contains(2))
+            return 6;
+        if (environmentTypes.Contains(0) && environmentTypes.Contains(1))
+            return 3;
+        if (environmentTypes.Contains(0) && environmentTypes.Contains(2))
+            return 4;
+        if (environmentTypes.Contains(1) && environmentTypes.Contains(2))
+            return 5;
+        return -1;
+    }
+
+    void SaveState()
+    {
+        // Copy current map
+        int[,] mapCopy = new int[currentLevel.width, currentLevel.height];
+        for (int x = 0; x < currentLevel.width; x++)
+            for (int y = 0; y < currentLevel.height; y++)
+                mapCopy[x, y] = map[x, y];
+        
+        // Copy selected tiles
+        List<Vector2Int> selectedCopy = new List<Vector2Int>(currentlySelectedTiles);
+        
+        moveHistory.Push((mapCopy, selectedCopy, selectedEnvType));
+    }
+
+    void Undo()
+    {
+        if (moveHistory.Count == 0) return;
+        
+        var previousState = moveHistory.Pop();
+        
+        // Restore map
+        for (int x = 0; x < currentLevel.width; x++)
+            for (int y = 0; y < currentLevel.height; y++)
+                map[x, y] = previousState.mapSnapshot[x, y];
+        
+        // Restore selection
+        ClearSelection();
+        currentlySelectedTiles = previousState.selectedSnapshot;
+        selectedEnvType = previousState.selectedEnvSnapshot;
+        HighlightTiles(currentlySelectedTiles);
+        
+        UpdateMapUI();
+    }
+
+
 }
